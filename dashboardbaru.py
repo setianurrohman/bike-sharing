@@ -76,6 +76,8 @@ menu_list = [
     "⏰ Per Jam",
     "📊 Hari Kerja vs Libur",
     "🌦️ Musim",
+    "💎 Distribusi Data",
+    "🎲 Hubungan Variabel",
     "📄 Data"
 ]
 
@@ -156,6 +158,44 @@ elif menu == "🌦️ Musim":
 
     fig = px.bar(df, x='season', y='cnt', color='season', template="plotly_dark")
     st.plotly_chart(fig, use_container_width=True)
+
+# ===== DISTRIBUSI DATA ====
+elif menu == "💎 Distribusi Data":
+    st.title("Distribusi Penggunaan Sepeda")
+
+    # Histogram
+    fig1 = px.histogram(day_df, x="cnt", title="Distribusi Jumlah Pengguna Sepeda")
+    fig1.update_layout(xaxis_title="Jumlah Pengguna", yaxis_title="Frekuensi")
+    st.plotly_chart(fig1)
+
+    st.write("Sebagian besar penggunaan sepeda berada di tingkat menengah, dengan beberapa lonjakan tinggi.")
+
+    # Boxplot
+    fig2 = px.box(day_df, x="cnt", title="Boxplot Pengguna Sepeda")
+    fig2.update_layout(xaxis_title="Jumlah Pengguna")
+    st.plotly_chart(fig2)
+
+    st.write("Terlihat adanya outlier, yaitu hari dengan jumlah pengguna yang sangat tinggi.")
+
+# ==== HUBUNGAN ====
+elif menu == "🎲 Hubungan Variabel":
+    st.title("Hubungan Antar Variabel")
+
+    # Scatter + garis tren
+    fig3 = px.scatter(day_df, x="temp", y="cnt",
+                      title="Hubungan Temperatur dengan Pengguna Sepeda")
+    fig3.update_layout(xaxis_title="Temperatur", yaxis_title="Jumlah Pengguna")
+    st.plotly_chart(fig3)
+
+    st.write("Semakin tinggi temperatur, jumlah pengguna sepeda cenderung meningkat.")
+
+    # Correlation Heatmap
+    corr = day_df[['cnt','temp','hum','windspeed']].corr()
+
+    fig4 = px.imshow(corr, text_auto=True, title="Correlation Matrix")
+    st.plotly_chart(fig4)
+
+    st.write("Temperatur memiliki hubungan paling kuat dengan jumlah pengguna sepeda.")
 
 # ===== DATA =====
 elif menu == "📄 Data":
